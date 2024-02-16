@@ -92,6 +92,13 @@ void AGAS1Character::FinishDying()
 	Destroy();
 }
 
+float AGAS1Character::GetCharacterLevel() const
+{
+	if (AttributeSet.IsValid())
+		return AttributeSet->GetLevel();
+	return 0.f;
+}
+
 float AGAS1Character::GetHealth() const
 {
 	if (AttributeSet.IsValid())
@@ -132,25 +139,59 @@ void AGAS1Character::AddCharacterAbilities()
 	if (GetLocalRole() != ROLE_Authority || !AbilitySystemComponent.IsValid() || AbilitySystemComponent->CharacterAbilitiesGiven)
 		return;
 
-	//
-	//
-	//
+	for (TSubclassOf<UA1CharGameplayAbility>& StartupAbility : CharacterAbilities)
+	{
+		AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(StartupAbility, GetAbilityLevel(StartupAbility.GetDefaultObject()->AbilityID), static_cast<int32>(StartupAbility.GetDefaultObject()->AbilityInputID), this));
+	}
+
+	AbilitySystemComponent->CharacterAbilitiesGiven = true;
 }
 
 void AGAS1Character::InitializeAttributes()
 {
+	if (!AbilitySystemComponent.IsValid())
+		return;
+
+	if (!DefaultAttributes)
+		UE_LOG(LogTemp, Warning, TEXT("%s() Missing DefaultAttributes for %s. Please fill int character's bp"), *FString(__FUNCTION__), *GetName());
+
+	FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
+	EffectContext.AddSourceObject(this);
+
+	FGameplayEffectSpecHandle NewHandle = AbilitySystemComponent->MakeOutgoingSpec(DefaultAttributes, GetCharacterLevel(), EffectContext);
+	if (NewHandle.IsValid())
+		FActiveGameplayEffectHandle ActiveGEHandle = AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*NewHandle.Data.Get(), AbilitySystemComponent.Get());
+
 }
 
 void AGAS1Character::AddStartupEffects()
 {
+	if (GetLocalRole() != ROLE_Authority || !AbilitySystemComponent.IsValid() || AbilitySystemComponent->StartupEffectsApplied)
+		return;
+
+	FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
+	EffectContext.AddSourceObject(this);
+
+	for (TSubclassOf<UGameplayEffect> GameplayEffect : StartupEffects)
+	{
+		FGameplayEffectSpecHandle NewHandle = AbilitySystemComponent->MakeOutgoingSpec(GameplayEffect, GetCharacterLevel(), EffectContext);
+		if (NewHandle.IsValid())
+			FActiveGameplayEffectHandle ActiveGEHandle = AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*NewHandle.Data.Get(), AbilitySystemComponent.Get());
+	}
+
+	AbilitySystemComponent->StartupEffectsApplied = true;
 }
 
 void AGAS1Character::SetHealth(float Health)
 {
+	if (AttributeSet.IsValid())
+		AttributeSet->SetHealth(Health);
 }
 
 void AGAS1Character::SetMana(float Mana)
 {
+	if (AttributeSet.IsValid())
+		AttributeSet->SetMana(Mana);
 }
 
 // Called every frame

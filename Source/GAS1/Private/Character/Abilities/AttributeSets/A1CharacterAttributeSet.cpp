@@ -8,10 +8,16 @@ void UA1CharacterAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProper
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
+	DOREPLIFETIME_CONDITION_NOTIFY(UA1CharacterAttributeSet, Level, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UA1CharacterAttributeSet, Health, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UA1CharacterAttributeSet, MaxHealth, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UA1CharacterAttributeSet, Mana, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UA1CharacterAttributeSet, MaxMana, COND_None, REPNOTIFY_Always);
+}
+
+void UA1CharacterAttributeSet::OnRep_Level(const FGameplayAttributeData& OldLevel)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UA1CharacterAttributeSet, Level, OldLevel);
 }
 
 void UA1CharacterAttributeSet::OnRep_Health(const FGameplayAttributeData& OldHealth)

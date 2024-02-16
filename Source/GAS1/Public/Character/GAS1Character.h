@@ -39,6 +39,9 @@ public:
 	virtual void FinishDying();
 
 	UFUNCTION(BlueprintCallable, Category = "GAS1Character")
+	float GetCharacterLevel() const;
+
+	UFUNCTION(BlueprintCallable, Category = "GAS1Character")
 	float GetHealth() const;
 
 	UFUNCTION(BlueprintCallable, Category = "GAS1Character")
@@ -74,7 +77,7 @@ protected:
 	TSubclassOf<class UGameplayEffect> DefaultAttributes;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Abilities")
-	TSubclassOf<class UGameplayEffect> StartupEffects;
+	TArray<TSubclassOf<class UGameplayEffect>> StartupEffects;
 
 	virtual void AddCharacterAbilities();
 
