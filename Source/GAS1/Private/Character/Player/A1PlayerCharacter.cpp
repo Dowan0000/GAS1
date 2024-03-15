@@ -171,7 +171,7 @@ void AA1PlayerCharacter::BindASCInput()
 {
 	if (/*!ASCInputBound && */AbilitySystemComponent.IsValid() && IsValid(InputComponent))
 	{
-		AbilitySystemComponent->BindAbilityActivationToInputComponent(InputComponent, FGameplayAbilityInputBinds(FString("ConfirmTarget"), FString("CancelTarget"), FString("GAS1AbilityID"), static_cast<int32>(GAS1AbilityID::Cancel)));
+		AbilitySystemComponent->BindAbilityActivationToInputComponent(InputComponent, FGameplayAbilityInputBinds(FString("ConfirmTarget"), FString("CancelTarget"), FString("GAS1AbilityID"), static_cast<int32>(GAS1AbilityID::Confirm), static_cast<int32>(GAS1AbilityID::Cancel)));
 	
 		/*ASCInputBound = true;*/
 	}
