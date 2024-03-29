@@ -139,6 +139,8 @@ void AGAS1Character::AddCharacterAbilities()
 	if (GetLocalRole() != ROLE_Authority || !AbilitySystemComponent.IsValid() || AbilitySystemComponent->CharacterAbilitiesGiven)
 		return;
 
+	UE_LOG(LogTemp, Warning, TEXT("///// AddCharacterAbilities /////"));
+
 	for (TSubclassOf<UA1CharGameplayAbility>& StartupAbility : CharacterAbilities)
 	{
 		AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(StartupAbility, GetAbilityLevel(StartupAbility.GetDefaultObject()->AbilityID), static_cast<int32>(StartupAbility.GetDefaultObject()->AbilityInputID), this));

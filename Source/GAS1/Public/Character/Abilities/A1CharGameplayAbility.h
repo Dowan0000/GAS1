@@ -20,6 +20,7 @@ public:
 
 	virtual void OnAvatarSet(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec) override;
 
+
 public:
 	// Abilities with this set will automatically activate when the input is pressed
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Ability")

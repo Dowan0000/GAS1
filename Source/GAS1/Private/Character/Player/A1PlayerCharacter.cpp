@@ -10,6 +10,7 @@
 #include "Player/A1PlayerController.h"
 #include "Character/Abilities/A1CharAbilitySystemComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "../../../GAS1.h"
 
 AA1PlayerCharacter::AA1PlayerCharacter(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
@@ -169,10 +170,11 @@ void AA1PlayerCharacter::InitializStartingValues(AA1PlayerState* PS)
 
 void AA1PlayerCharacter::BindASCInput()
 {
-	if (/*!ASCInputBound && */AbilitySystemComponent.IsValid() && IsValid(InputComponent))
+	if (!ASCInputBound && AbilitySystemComponent.IsValid() && IsValid(InputComponent))
 	{
-		AbilitySystemComponent->BindAbilityActivationToInputComponent(InputComponent, FGameplayAbilityInputBinds(FString("ConfirmTarget"), FString("CancelTarget"), FString("GAS1AbilityID"), static_cast<int32>(GAS1AbilityID::Confirm), static_cast<int32>(GAS1AbilityID::Cancel)));
-	
-		/*ASCInputBound = true;*/
+		FTopLevelAssetPath AbilityEnumAssetPath = FTopLevelAssetPath(FName("/Script/GAS1"), FName("GAS1AbilityID"));
+		AbilitySystemComponent->BindAbilityActivationToInputComponent(InputComponent, FGameplayAbilityInputBinds(FString("ConfirmTarget"), FString("CancelTarget"), AbilityEnumAssetPath, static_cast<int32>(GAS1AbilityID::Confirm), static_cast<int32>(GAS1AbilityID::Cancel)));
+		
+		ASCInputBound = true;
 	}
 }

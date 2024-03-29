@@ -60,6 +60,8 @@ protected:
 	TWeakObjectPtr<class UA1CharAbilitySystemComponent> AbilitySystemComponent;
 	TWeakObjectPtr<class UA1CharacterAttributeSet> AttributeSet;
 
+	bool ASCInputBound = false;
+
 	FGameplayTag DeadTag;
 	FGameplayTag EffectRemoveOnDeathTag;
 
