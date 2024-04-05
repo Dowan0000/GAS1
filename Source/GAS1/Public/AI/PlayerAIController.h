@@ -14,4 +14,6 @@ class GAS1_API APlayerAIController : public AAIController
 {
 	GENERATED_BODY()
 	
+public:
+	APlayerAIController();
 };
